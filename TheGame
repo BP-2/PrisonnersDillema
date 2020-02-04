@@ -1,0 +1,135 @@
+import random
+import matplotlib.pyplot as plt
+import getpass 
+
+print("Welcome to Prisoner Dillema!  By: Brady Phelps")
+print("***"*16)
+print("RULES:")
+print("In the game each player is given the option of either snitching (y) or not snitching (n).")
+print("By snitching, the player will not take the penalty (shown in question), and their opponent will.")
+print("If both players snitch, both players will take the blame.  If both players don't snitch, nobody gets penalized.")
+print("The goal is to finish the game with less years than your opponent.  However, if you snitch on your opponent")
+print("your streetcred level will rise.  At the end of the game, the player with the highest score will have to spin the ")
+print("wheel of snitches.  They will spin it once for every streetcred point they attained during the game. ")
+print("Every spin of the wheel of snitches will give a 1-3 shot of getting killed and losing.")
+print("Good luck!!!")
+print("")
+
+#Initializing variables and functions 
+score1 = 0
+score2 = 0
+def penaltyOne(score1):
+  score1 = score1-100
+def penaltyTwo(score2):
+  score2 = score2-100
+scenarios = [1000,400,700,800] #this is a list of the different year values for punishments
+streetCred1 = 0
+streetCred2 = 0
+
+
+'''In order to keep the game competitive.  I added a street-cred 
+score system in order to balance the game a little bit more so
+players are prevented from snitching every time'''
+
+
+
+#The game loop that will run until iterable is terminated
+
+#rounds is variable serving as an iterator
+rounds=0
+
+while rounds < 4:
+  #I then choose a random item from the list I initialized above to be the punishment
+  randomScenario = random.choice(scenarios)
+
+  #this defines the inputs of both players
+  x= input(print("You are facing the judge, will you snitch, or not?  The punishment is ", randomScenario, " years."))
+  y= input(print("You are facing the judge, will you snitch, or not?  The punishment is ", randomScenario, " years."))
+
+  #This section deals with the inputs (y or n) and increments or decrements a couple variables depending on the inputs y is yes and n is no
+  
+  x= getpass.getpass('Enter your age:')
+  y= getpass.getpass
+  if x == "y" and y == "n":
+    score2 -= randomScenario  
+    streetCred1 += 1
+  elif x == "n" and y == "y":
+    score1 -= randomScenario
+    streetCred2 += 1
+  elif x == "y" and y =="y":
+    score1 = score1 - (randomScenario/2)
+    score2 = score2 - (randomScenario/2)
+    streetCred1 += 1
+    streetCred2 += 1
+  elif x == "n" and y == "n":
+    score1 = score1+1
+    score2 = score2+1
+  else:
+    print("Please only answer with y or n")
+  print("")
+  print("A round has been completed")  #I added this to basically just announce when each iteration has been run through the loop
+  print("")
+  rounds += 1 #increments the interator
+
+print("")
+print("Player one has,",score1, "years.")  #These both announce the score at the end of the game
+print("Player two lost,",score2, "years.")
+print("")
+
+
+''' These two if statements announce who had the highest score, the winner then is assingned to the temporary
+winner variable.  This then triggers which player will spin the wheel of snitching'''
+if score1 > score2 :
+  print("Congratulations Player 1!  You have the highest score, for now, but do you survive the streets?")  
+  tempWinner = "player1"
+if score2 > score1 :
+  print("Congratulations Player 2!  You have the highest score, for now, but do you survive the streets?")
+  tempWinner = "player2"
+
+print("")
+
+if score1 == score2:
+  print ("y'all tied... and y'all suck") #pls don't tie 
+
+'''The following if statements contain nested while statements that will run for 
+as many iterations as they attained through streetcred.  Within the while statements 
+there is an input to spin the wheel and then a random choice is chosen from the 
+options list.  Then if the random selection was life, it will run again and decrement
+the streetcred variable until it reaches zero.  If it reaches zero, the spinning player
+will win because they survived with a higher score.  If the random choice is death, the 
+street cred will be set to -1, the game will end, and the player with the lower score will win.''' 
+
+if tempWinner == "player1":
+  while streetCred1 > 0:
+    input("Type a letter to spin the wheel of snitching, you will spin once for every streetcred point attained during the game.")
+    options = ["life","life","death"]
+    life = random.choice(options)
+    plt.hist(life)  #I also added a little graph to show your spin results as well since we learned this at the begininning of the year
+    plt.show("life", "death")
+    if life == "death":
+      print("You were killed by a disgruntled gang member for snitching...")
+      print("You lose")
+      streetCred1 = -1
+    elif life == "life":
+      print("You survived the spin")
+      streetCred1 -= 1
+      print(streetCred1," turns left")
+  if streetCred1 == 0:
+    print ("You have won and survived")
+if tempWinner == "player2":
+  while streetCred2 > 0:
+    input("Type a letter to spin the wheel of snitching, you will spin once for every streetcred point attained during the game.")
+    options = ["life","life","death"]
+    life = random.choice(options)
+    plt.hist(life)
+    plt.show("life", "death")
+    if life == "death":
+      print("You were killed by a disgruntled gang member for snitching...")
+      print("You lose")
+      streetCred2 = -1
+    elif life == "life":
+      print("You survived the spin")
+      streetCred2 -= 1
+      print(streetCred1," turns left")
+  if streetCred2 == 0:
+    print("You have won and survived!")
